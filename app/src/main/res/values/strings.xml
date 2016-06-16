@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">romaddons</string>
+    <string name="settings_title">Settings</string>
+    <string name="text">text</string>
+    <string name="key">key</string>
+    <string name="cb1_key">checkbox indicator</string>
+    <string name="cb1">checkboxstring one</string>
+    <string name="tv1">textviewstring one</string>
+    <string name="bt1">Download MixPlorer</string>
+    <string name="bt2">Download MixPlorer Addons</string>
+
+</resources>
