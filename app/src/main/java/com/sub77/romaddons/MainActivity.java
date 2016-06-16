@@ -7,9 +7,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,24 +23,28 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-//import android.widget.Button;
+import eu.chainfire.libsuperuser.Shell;
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
 
+    /*
     public CheckBox cb1;
     final String KEY_CB1 = "KEY_CB1";
-
     String VALUE_CB1;
     String READ_CB1;
+    TextView tv1;
+    */
     String READ_URL;
 
     String httpList;
+    String httpPref;
 
-    TextView tv1;
+
     TextView tv2;
 
     Button bt1;
     Button bt2;
+    Button bt3;
 
     SharedPreferences prefs;
     SharedPreferences.Editor prefseditor;
@@ -61,11 +65,12 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         /*cb1 = (CheckBox) findViewById(R.id.CheckBox1);
         cb1.setOnClickListener(this);
-        */
         tv1 = (TextView) findViewById(R.id.TextView1);
+        */
         tv2 = (TextView) findViewById(R.id.TextView2);
         bt1 = (Button) findViewById(R.id.btn_1);
         bt2 = (Button) findViewById(R.id.btn_2);
+        bt3 = (Button) findViewById(R.id.btn_3);
     };
 
     @Override
@@ -80,6 +85,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         if (bt1.isPressed()) {
             httpList = "mixFile.txt";
+            httpPref = "m";
             downloadTxt();
             readTxt();
             downloadApk();
@@ -87,12 +93,23 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         if (bt2.isPressed()) {
             httpList = "mixAddonFile.txt";
+            httpPref = "ma";
             downloadTxt();
             readTxt();
             downloadApk();
         }
-        prefseditor.putString(KEY_CB1, VALUE_CB1);
-        prefseditor.commit();
+
+        if (bt3.isPressed()) {
+            httpList = "persistFile.txt";
+            httpPref = "p";
+            File cpto = new File(Environment.getExternalStorageDirectory() + "/RomAddon/"+httpList);
+            Shell.SU.run(("cp -p /persist/persistFile.txt"+" " + cpto));
+            readTxt();
+            downloadApk();
+        }
+
+        //prefseditor.putString(KEY_CB1, VALUE_CB1);
+        //prefseditor.commit();
 
         switch (v.getId()) {
 
@@ -145,8 +162,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             //this.initiateInstallation();
 
         } catch (MalformedURLException e) {
+            Log.e("RomAddon", e.getMessage());
             e.printStackTrace();
         } catch (IOException e) {
+            Log.e("RomAddon", e.getMessage());
             e.printStackTrace();
         }
     }
@@ -171,8 +190,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             }
             br.close();
         }
+
         catch (IOException e) {
-            //You'll need to add proper error handling here
+            Log.e("RomAddon", e.getMessage());
+            e.printStackTrace();
         }
 
         tv2.setText(text.toString());
@@ -192,10 +213,14 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 urlConnection.connect();
 
                 File sdcard = Environment.getExternalStorageDirectory();
-                File file = new File(sdcard,"RomAddon/"+String.valueOf(inst)+"name.apk");
+                File file = new File(sdcard,"RomAddon/"+httpPref+String.valueOf(inst)+"name.apk");
 
                 FileOutputStream fileOutput = new FileOutputStream(file);
                 InputStream inputStream = urlConnection.getInputStream();
+
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                Uri uri = Uri.fromFile(new File(sdcard,"RomAddon/"+httpPref+String.valueOf(inst)+"name.apk"));
+                intent.setDataAndType(uri, "application/vnd.android.package-archive");
 
                 byte[] buffer = new byte[1024];
                 int bufferLength = 0;
@@ -204,22 +229,22 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     fileOutput.write(buffer, 0, bufferLength);
                 }
                 fileOutput.close();
-                //this.checkUnknownSourceEnability();
-                //this.initiateInstallation();
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                Uri uri = Uri.fromFile(new File(sdcard,"RomAddon/"+String.valueOf(inst)+"name.apk"));
-                intent.setDataAndType(uri, "application/vnd.android.package-archive");
+
                 startActivity(intent);
+                Log.i("RomAddon","installed");
                 inst=inst+1;
             }
 
-        }catch(MalformedURLException e){
+        } catch (MalformedURLException e) {
+            Log.e("RomAddon", e.getMessage());
             e.printStackTrace();
-        }catch(IOException e){
+        } catch (IOException e) {
+            Log.e("RomAddon", e.getMessage());
             e.printStackTrace();
         }
 
     }
+
 };
 
 

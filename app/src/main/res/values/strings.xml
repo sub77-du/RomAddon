@@ -10,5 +10,5 @@
     <string name="tv1">textviewstring one</string>
     <string name="bt1">Download MixPlorer</string>
     <string name="bt2">Download MixPlorer Addons</string>
-
+    <string name="bt3">Download Persistent FileList</string>
 </resources>
