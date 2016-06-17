@@ -1,5 +1,7 @@
 package com.sub77.romaddons;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -7,9 +9,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,10 +45,12 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
 
     TextView tv2;
+    EditText et1;
 
     Button bt1;
     Button bt2;
     Button bt3;
+    Button bt4;
 
     SharedPreferences prefs;
     SharedPreferences.Editor prefseditor;
@@ -68,9 +74,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         tv1 = (TextView) findViewById(R.id.TextView1);
         */
         tv2 = (TextView) findViewById(R.id.TextView2);
+        et1 = (EditText) findViewById(R.id.EditText1);
         bt1 = (Button) findViewById(R.id.btn_1);
         bt2 = (Button) findViewById(R.id.btn_2);
         bt3 = (Button) findViewById(R.id.btn_3);
+        bt4 = (Button) findViewById(R.id.btn_4);
+
+        checkPersist();
     };
 
     @Override
@@ -100,12 +110,34 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         }
 
         if (bt3.isPressed()) {
+            checkPersist();
             httpList = "persistFile.txt";
             httpPref = "p";
             File cpto = new File(Environment.getExternalStorageDirectory() + "/RomAddon/"+httpList);
             Shell.SU.run(("cp -p /persist/persistFile.txt"+" " + cpto));
             readTxt();
             downloadApk();
+        }
+
+        if (bt4.isPressed()) {
+            (new AlertDialog.Builder(this))
+                    .setTitle(R.string.persistent_title)
+                    .setMessage(Html.fromHtml(getString(R.string.persistent_description)))
+                    .setCancelable(true)
+                    .setNeutralButton(android.R.string.ok, null).show();
+            File sdcard = Environment.getExternalStorageDirectory();
+            File check = new File(sdcard, "RomAddon/persistTemplateFile.txt");
+            File check2 = new File(sdcard, "RomAddon/persistFile.txt");
+            if (!check.exists()) {
+                httpList = "persistTemplateFile.txt";
+                downloadTxt();
+            }   if (check2.exists()) {
+                bt4.setText("Update persistent FileList");
+                Shell.SU.run(("mount -o rw,remount /persist"));
+                Shell.SU.run(("rm" +" "+"/persist/persistFile.txt"));
+                Shell.SU.run(("cp -p "+ check2 +" "+"/persist/persistFile.txt"));
+                Shell.SU.run(("mount -o ro,remount /persist"));
+            }
         }
 
         //prefseditor.putString(KEY_CB1, VALUE_CB1);
@@ -119,9 +151,34 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             }
             */
 
-            case  R.id.btn_1:{
-
+            case  R.id.btn_3:{
+                checkPersist();
             }
+        }
+    }
+
+    private void checkPersist() {
+        File check = new File("persist/persistFile.txt");
+        if (!check.exists()) {
+            bt3.setText("no persistent FileList found");
+            //bt3.setClickable(false);
+        }
+    }
+
+    private void editPersist() {
+        et1.setVisibility(View.VISIBLE);
+        File sdcard = Environment.getExternalStorageDirectory();
+        File file = new File(sdcard, "RomAddon/templateFile.txt");
+        String filename = "myfile";
+        et1 = (EditText) findViewById(R.id.EditText1);
+        String res = et1.getText().toString();
+        FileOutputStream outputStream;
+        try {
+            outputStream = openFileOutput(res, Context.MODE_PRIVATE);
+            outputStream.write(res.getBytes());
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -197,6 +254,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         }
 
         tv2.setText(text.toString());
+        //et1.setText(text.toString());
     }
 
     private void downloadApk(){
@@ -246,5 +304,3 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     }
 
 };
-
-
