@@ -1,5 +1,6 @@
 package com.sub77.romaddons;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
-import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -29,7 +29,7 @@ import java.net.URL;
 
 import eu.chainfire.libsuperuser.Shell;
 
-public class MainActivity extends ActionBarActivity implements View.OnClickListener {
+public class MainActivity extends Activity implements View.OnClickListener {
 
     /*
     public CheckBox cb1;
@@ -43,7 +43,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     String httpList;
     String httpPref;
 
-
     TextView tv2;
     EditText et1;
 
@@ -51,11 +50,12 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     Button bt2;
     Button bt3;
     Button bt4;
+    Button bt5;
+    Button bt6;
 
     SharedPreferences prefs;
     SharedPreferences.Editor prefseditor;
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -79,6 +79,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         bt2 = (Button) findViewById(R.id.btn_2);
         bt3 = (Button) findViewById(R.id.btn_3);
         bt4 = (Button) findViewById(R.id.btn_4);
+        bt5 = (Button) findViewById(R.id.btn_5);
+        bt6 = (Button) findViewById(R.id.btn_6);
 
         checkPersist();
     };
@@ -138,6 +140,16 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 Shell.SU.run(("cp -p "+ check2 +" "+"/persist/persistFile.txt"));
                 Shell.SU.run(("mount -o ro,remount /persist"));
             }
+        }
+
+        if (bt5.isPressed()) {
+            Intent intent = new Intent(this, MountActivity.class);
+            startActivity(intent);
+        }
+
+        if (bt6.isPressed()) {
+            Intent intent6 = new Intent(this, DatabaseTable.class);
+            startActivity(intent6);
         }
 
         //prefseditor.putString(KEY_CB1, VALUE_CB1);

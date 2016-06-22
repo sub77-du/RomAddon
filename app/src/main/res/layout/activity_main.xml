@@ -6,44 +6,13 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity"
     android:gravity="bottom"
-    android:background="@color/background_material_dark">
-        <!--
-        <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/cb1"
-        android:key="@string/cb1"
-        android:id="@+id/CheckBox1"
-        android:layout_marginBottom="60dp"
-        android:clickable="true"
-        android:checked="true"
-        android:enabled="true"
-        android:onClick="prefseditor.commit()" />
-        <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/cb1_key"
-        android:id="@+id/TextView1"
-        android:layout_below="@+id/checkBox1"
-        android:layout_centerHorizontal="true" />
-        <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ListView1"
-        android:layout_below="@+id/btn_3"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-        -->
+    style="@android:style/Theme.Material">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/tv2"
         android:id="@+id/TextView2"
-        android:layout_centerHorizontal="true"
-        android:background="@color/background_material_dark"
-        android:textColor="@color/primary_text_default_material_dark" />
-
+        android:layout_centerHorizontal="true" />
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -52,7 +21,6 @@
         android:layout_alignParentStart="false"
         android:inputType="text"
         android:visibility="invisible" />
-
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -61,9 +29,7 @@
         android:layout_below="@+id/TextView2"
         android:layout_centerHorizontal="true"
         android:clickable="true"
-        android:onClick="onClick"
-        style="@android:style/Widget.Material.Button" />
-
+        android:onClick="onClick" />
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -72,9 +38,7 @@
         android:layout_below="@+id/btn_1"
         android:layout_centerHorizontal="true"
         android:clickable="true"
-        android:onClick="onClick"
-        style="@android:style/Widget.Material.Button" />
-
+        android:onClick="onClick" />
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -82,9 +46,7 @@
         android:id="@+id/btn_3"
         android:clickable="true"
         android:onClick="onClick"
-        android:layout_below="@+id/btn_2"
-        style="@android:style/Widget.Material.Button" />
-
+        android:layout_below="@+id/btn_2" />
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -92,7 +54,23 @@
         android:id="@+id/btn_4"
         android:clickable="true"
         android:onClick="onClick"
-        android:layout_below="@+id/btn_3"
-        style="@android:style/Widget.Material.Button" />
+        android:layout_below="@+id/btn_3" />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/bt5"
+        android:id="@+id/btn_5"
+        android:clickable="true"
+        android:onClick="onClick"
+        android:layout_below="@+id/btn_4" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/bt6"
+        android:id="@+id/btn_6"
+        android:clickable="true"
+        android:onClick="onClick"
+        android:layout_below="@+id/btn_5" />
 </RelativeLayout>

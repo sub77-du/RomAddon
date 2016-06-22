@@ -1,0 +1,2 @@
+apk1,url1
+apk2,url2
