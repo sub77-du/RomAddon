@@ -3,11 +3,11 @@ package com.sub77.romaddon;
 public class ApkPublic {
 
     private String apk;
-    private int url;
+    private String url;
     private long id;
     private boolean checked;
 
-    public ApkPublic(String apk, int url, long id, boolean checked) {
+    public ApkPublic(String apk, String url, long id, boolean checked) {
         this.apk = apk;
         this.url = url;
         this.id = id;
@@ -23,11 +23,11 @@ public class ApkPublic {
     }
 
 
-    public int getUrl() {
+    public String getUrl() {
         return url;
     }
 
-    public void setUrl(int url) {
+    public void setUrl(String url) {
         this.url = url;
     }
 

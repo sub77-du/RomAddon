@@ -150,7 +150,7 @@ public class ApkPublicMainActivity extends android.app.Activity {
                     return;
                 }
 
-                int url = Integer.parseInt(urlString);
+                String url = urlString;
                 editTextUrl.setText("");
                 editTextApk.setText("");
 
@@ -293,7 +293,8 @@ public class ApkPublicMainActivity extends android.app.Activity {
                             return;
                         }
 
-                        int url = Integer.parseInt(urlString);
+                        //int url = Integer.parseInt(urlString);
+                        String url = urlString;
 
                         // An dieser Stelle schreiben wir die geänderten Daten in die SQLite Datenbank
                         ApkPublic updatedApkPublic = dataSource.updateApkPublic(apkPublic.getId(), apk, url, apkPublic.isChecked());

@@ -12,20 +12,20 @@ public class ApkPublicDbHelper extends SQLiteOpenHelper{
     public static final String DB_NAME = "apkpublic_list.db";
     public static final int DB_VERSION = 2;
 
-    public static final String TABLE_SHOPPING_LIST = "apkpublic_list";
+    public static final String TABLE_PUBLICAPK_LIST = "apkpublic_list";
 
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_APK = "apk";
     public static final String COLUMN_URL = "url";
     public static final String COLUMN_CHECKED = "checked";
 
-    public static final String SQL_DROP = "DROP TABLE IF EXISTS " + TABLE_SHOPPING_LIST;
+    public static final String SQL_DROP = "DROP TABLE IF EXISTS " + TABLE_PUBLICAPK_LIST;
 
     public static final String SQL_CREATE =
-            "CREATE TABLE " + TABLE_SHOPPING_LIST +
+            "CREATE TABLE " + TABLE_PUBLICAPK_LIST +
                     "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     COLUMN_APK + " TEXT NOT NULL, " +
-                    COLUMN_URL + " INTEGER NOT NULL, " +
+                    COLUMN_URL + " TEXT NOT NULL, " +
                     COLUMN_CHECKED + " BOOLEAN NOT NULL DEFAULT 0);";
 
     public ApkPublicDbHelper(Context context) {

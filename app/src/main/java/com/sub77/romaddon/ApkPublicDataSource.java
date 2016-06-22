@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -40,14 +41,14 @@ public class ApkPublicDataSource {
         Log.d(LOG_TAG, "Datenbank mit Hilfe des DbHelpers geschlossen.");
     }
 
-    public ApkPublic createApkPublic(String product, int quantity) {
+    public ApkPublic createApkPublic(String apk, String url) {
         ContentValues values = new ContentValues();
-        values.put(ApkPublicDbHelper.COLUMN_APK, product);
-        values.put(ApkPublicDbHelper.COLUMN_URL, quantity);
+        values.put(ApkPublicDbHelper.COLUMN_APK, apk);
+        values.put(ApkPublicDbHelper.COLUMN_URL, url);
 
-        long insertId = database.insert(ApkPublicDbHelper.TABLE_SHOPPING_LIST, null, values);
+        long insertId = database.insert(ApkPublicDbHelper.TABLE_PUBLICAPK_LIST, null, values);
 
-        Cursor cursor = database.query(ApkPublicDbHelper.TABLE_SHOPPING_LIST,
+        Cursor cursor = database.query(ApkPublicDbHelper.TABLE_PUBLICAPK_LIST,
                 columns, ApkPublicDbHelper.COLUMN_ID + "=" + insertId,
                 null, null, null, null);
 
@@ -61,27 +62,27 @@ public class ApkPublicDataSource {
     public void deleteApkPublic(ApkPublic apkPublic) {
         long id = apkPublic.getId();
 
-        database.delete(ApkPublicDbHelper.TABLE_SHOPPING_LIST,
+        database.delete(ApkPublicDbHelper.TABLE_PUBLICAPK_LIST,
                 ApkPublicDbHelper.COLUMN_ID + "=" + id,
                 null);
 
         Log.d(LOG_TAG, "Eintrag gelöscht! ID: " + id + " Inhalt: " + apkPublic.toString());
     }
 
-    public ApkPublic updateApkPublic(long id, String newProduct, int newQuantity, boolean newChecked) {
+    public ApkPublic updateApkPublic(long id, String newApk, String newUrl, boolean newChecked) {
         int intValueChecked = (newChecked)? 1 : 0;
 
         ContentValues values = new ContentValues();
-        values.put(ApkPublicDbHelper.COLUMN_APK, newProduct);
-        values.put(ApkPublicDbHelper.COLUMN_URL, newQuantity);
+        values.put(ApkPublicDbHelper.COLUMN_APK, newApk);
+        values.put(ApkPublicDbHelper.COLUMN_URL, newUrl);
         values.put(ApkPublicDbHelper.COLUMN_CHECKED, intValueChecked);
 
-        database.update(ApkPublicDbHelper.TABLE_SHOPPING_LIST,
+        database.update(ApkPublicDbHelper.TABLE_PUBLICAPK_LIST,
                 values,
                 ApkPublicDbHelper.COLUMN_ID + "=" + id,
                 null);
 
-        Cursor cursor = database.query(ApkPublicDbHelper.TABLE_SHOPPING_LIST,
+        Cursor cursor = database.query(ApkPublicDbHelper.TABLE_PUBLICAPK_LIST,
                 columns, ApkPublicDbHelper.COLUMN_ID + "=" + id,
                 null, null, null, null);
 
@@ -94,18 +95,18 @@ public class ApkPublicDataSource {
 
     private ApkPublic cursorToApkPublic(Cursor cursor) {
         int idIndex = cursor.getColumnIndex(ApkPublicDbHelper.COLUMN_ID);
-        int idProduct = cursor.getColumnIndex(ApkPublicDbHelper.COLUMN_APK);
-        int idQuantity = cursor.getColumnIndex(ApkPublicDbHelper.COLUMN_URL);
+        int idApk = cursor.getColumnIndex(ApkPublicDbHelper.COLUMN_APK);
+        int idUrl = cursor.getColumnIndex(ApkPublicDbHelper.COLUMN_URL);
         int idChecked = cursor.getColumnIndex(ApkPublicDbHelper.COLUMN_CHECKED);
 
-        String product = cursor.getString(idProduct);
-        int quantity = cursor.getInt(idQuantity);
+        String apk = cursor.getString(idApk);
+        String url = cursor.getString(idUrl);
         long id = cursor.getLong(idIndex);
         int intValueChecked = cursor.getInt(idChecked);
 
         boolean isChecked = (intValueChecked != 0);
 
-        ApkPublic apkPublic = new ApkPublic(product, quantity, id, isChecked);
+        ApkPublic apkPublic = new ApkPublic(apk, url, id, isChecked);
 
         return apkPublic;
     }
@@ -113,7 +114,7 @@ public class ApkPublicDataSource {
     public List<ApkPublic> getAllApkPublics() {
         List<ApkPublic> apkPublicList = new ArrayList<>();
 
-        Cursor cursor = database.query(ApkPublicDbHelper.TABLE_SHOPPING_LIST,
+        Cursor cursor = database.query(ApkPublicDbHelper.TABLE_PUBLICAPK_LIST,
                 columns, null, null, null, null, null);
 
         cursor.moveToFirst();
