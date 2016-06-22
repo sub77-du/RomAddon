@@ -19,4 +19,11 @@
     <string name="dialog_title_product">Produkt:</string>
     <string name="dialog_button_positive">Ändern</string>
     <string name="dialog_button_negative">Abbrechen</string>
+
+    <string name="dialog_title_url">Url:</string>
+    <string name="dialog_title_apk">Apk:</string>
+    <string name="button_add_apk">+</string>
+    <string name="editText_hint_url">url</string>
+    <string name="editText_hint_apk">apk</string>
+
 </resources>
