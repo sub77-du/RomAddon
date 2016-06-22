@@ -1,11 +1,14 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
+    <style name="AppTheme" parent="android:Theme.DeviceDefault">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">#ff11afe5</item>
         <item name="colorPrimaryDark">#ff125c84</item>
         <item name="colorAccent">#ff11c4ff</item>
     </style>
+
+    <style name="Theme.RomAddon.Light" parent="android:Theme.Material.Light" />
+    <style name="Theme.RomAddon" parent="android:Theme.Material" />
 
 </resources>
