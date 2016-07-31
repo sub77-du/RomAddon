@@ -1,14 +1,18 @@
 package com.sub77.romaddons;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
+import android.support.v4.app.ActivityCompat;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -28,6 +32,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import eu.chainfire.libsuperuser.Shell;
+
+import static android.content.ContentValues.TAG;
+import static android.os.Environment.getExternalStorageDirectory;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
@@ -79,8 +86,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         bt2 = (Button) findViewById(R.id.btn_2);
         bt3 = (Button) findViewById(R.id.btn_3);
         bt4 = (Button) findViewById(R.id.btn_4);
-        bt5 = (Button) findViewById(R.id.btn_5);
-        bt6 = (Button) findViewById(R.id.btn_6);
 
         checkPersist();
     };
@@ -115,7 +120,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             checkPersist();
             httpList = "persistFile.txt";
             httpPref = "p";
-            File cpto = new File(Environment.getExternalStorageDirectory() + "/RomAddon/"+httpList);
+            File cpto = new File(getApplicationContext().getFilesDir().getPath() + "/RomAddon/"+httpList);
             Shell.SU.run(("cp -p /persist/persistFile.txt"+" " + cpto));
             readTxt();
             downloadApk();
@@ -127,9 +132,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     .setMessage(Html.fromHtml(getString(R.string.persistent_description)))
                     .setCancelable(true)
                     .setNeutralButton(android.R.string.ok, null).show();
-            File sdcard = Environment.getExternalStorageDirectory();
-            File check = new File(sdcard, "RomAddon/persistTemplateFile.txt");
-            File check2 = new File(sdcard, "RomAddon/persistFile.txt");
+            File check = new File(getApplicationContext().getFilesDir().getPath() + "RomAddon/persistTemplateFile.txt");
+            File check2 = new File(getApplicationContext().getFilesDir().getPath() + "RomAddon/persistFile.txt");
             if (!check.exists()) {
                 httpList = "persistTemplateFile.txt";
                 downloadTxt();
@@ -140,16 +144,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 Shell.SU.run(("cp -p "+ check2 +" "+"/persist/persistFile.txt"));
                 Shell.SU.run(("mount -o ro,remount /persist"));
             }
-        }
-
-        if (bt5.isPressed()) {
-            Intent intent = new Intent(this, MountActivity.class);
-            startActivity(intent);
-        }
-
-        if (bt6.isPressed()) {
-            Intent intent6 = new Intent(this, DatabaseTable.class);
-            startActivity(intent6);
         }
 
         //prefseditor.putString(KEY_CB1, VALUE_CB1);
@@ -179,8 +173,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private void editPersist() {
         et1.setVisibility(View.VISIBLE);
-        File sdcard = Environment.getExternalStorageDirectory();
-        File file = new File(sdcard, "RomAddon/templateFile.txt");
+        File file = new File(getApplicationContext().getFilesDir().getPath() + "RomAddon/templateFile.txt");
         String filename = "myfile";
         et1 = (EditText) findViewById(R.id.EditText1);
         String res = et1.getText().toString();
@@ -202,7 +195,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
             urlConnection.setDoOutput(true);
             urlConnection.connect();
 
-            File folder = new File(Environment.getExternalStorageDirectory() + "/RomAddon");
+            File folder = new File(getApplicationContext().getFilesDir().getPath() + "RomAddon");
+
             boolean success = true;
             if (!folder.exists()) {
                 Toast.makeText(MainActivity.this, "Directory Does Not Exist, Create It", Toast.LENGTH_SHORT).show();
@@ -214,8 +208,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 Toast.makeText(MainActivity.this, "Failed - Error", Toast.LENGTH_SHORT).show();
             }
 
-            File sdcard = Environment.getExternalStorageDirectory();
-            File file = new File(sdcard, "RomAddon/"+httpList);
+            File file = new File(getApplicationContext().getFilesDir().getPath() + "RomAddon/templateFile.txt");
 
             FileOutputStream fileOutput = new FileOutputStream(file);
             InputStream inputStream = urlConnection.getInputStream();
@@ -240,8 +233,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void readTxt() {
-        File sdcard = Environment.getExternalStorageDirectory();
-        File file = new File(sdcard, "RomAddon/"+httpList);
+        File file = new File(getApplicationContext().getFilesDir().getPath() + "RomAddon/templateFile.txt");
         prefseditor.clear();
         StringBuilder text = new StringBuilder();
 
@@ -282,14 +274,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 urlConnection.setDoOutput(true);
                 urlConnection.connect();
 
-                File sdcard = Environment.getExternalStorageDirectory();
-                File file = new File(sdcard,"RomAddon/"+httpPref+String.valueOf(inst)+"name.apk");
+                File file = new File(getApplicationContext().getFilesDir().getPath() + "RomAddon/"+httpPref+String.valueOf(inst)+"name.apk");
 
                 FileOutputStream fileOutput = new FileOutputStream(file);
                 InputStream inputStream = urlConnection.getInputStream();
 
                 Intent intent = new Intent(Intent.ACTION_VIEW);
-                Uri uri = Uri.fromFile(new File(sdcard,"RomAddon/"+httpPref+String.valueOf(inst)+"name.apk"));
+                Uri uri = Uri.fromFile(new File(getApplicationContext().getFilesDir().getPath() + "RomAddon/"+httpPref+String.valueOf(inst)+"name.apk"));
                 intent.setDataAndType(uri, "application/vnd.android.package-archive");
 
                 byte[] buffer = new byte[1024];
@@ -312,6 +303,27 @@ public class MainActivity extends Activity implements View.OnClickListener {
             Log.e("RomAddon", e.getMessage());
             e.printStackTrace();
         }
+
+    }
+
+    public  boolean isStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                Log.v(TAG,"Permission is granted");
+                return true;
+            } else {
+
+                Log.v(TAG,"Permission is revoked");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
+        }
+        else { //permission is automatically granted on sdk<23 upon installation
+            Log.v(TAG,"Permission is granted");
+            return true;
+        }
+
 
     }
 

@@ -3,8 +3,6 @@
     package="com.sub77.romaddons">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -14,24 +12,6 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_title">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".MountActivity"
-            android:label="@string/title_activity_mount">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".DatabaseTable"
-            android:label="@string/title_activity_mount">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

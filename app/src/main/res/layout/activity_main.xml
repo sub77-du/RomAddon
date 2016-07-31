@@ -56,21 +56,4 @@
         android:onClick="onClick"
         android:layout_below="@+id/btn_3" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/bt5"
-        android:id="@+id/btn_5"
-        android:clickable="true"
-        android:onClick="onClick"
-        android:layout_below="@+id/btn_4" />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/bt6"
-        android:id="@+id/btn_6"
-        android:clickable="true"
-        android:onClick="onClick"
-        android:layout_below="@+id/btn_5" />
 </RelativeLayout>
